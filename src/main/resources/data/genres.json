@@ -1,0 +1,128 @@
+[
+	{
+		"id": 0,
+		"active": 1,
+		"name": "Unknown",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 1,
+		"active": 1,
+		"name": "Alternative",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 2,
+		"active": 1,
+		"name": "Classic Rock",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 3,
+		"active": 1,
+		"name": "Emo",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 4,
+		"active": 1,
+		"name": "Glam",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 5,
+		"active": 1,
+		"name": "Grunge",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 6,
+		"active": 1,
+		"name": "Metal",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 7,
+		"active": 1,
+		"name": "Pop-Rock",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 8,
+		"active": 1,
+		"name": "Prog",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 9,
+		"active": 1,
+		"name": "Punk",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 10,
+		"active": 1,
+		"name": "Rock",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 11,
+		"active": 1,
+		"name": "Southern Rock",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 12,
+		"active": 1,
+		"name": "Country",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 13,
+		"active": 1,
+		"name": "R&B\/Soul\/Funk",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 15,
+		"active": 1,
+		"name": "Pop\/Dance\/Electronic",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 16,
+		"active": 1,
+		"name": "Nu-Metal",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 17,
+		"active": 1,
+		"name": "Novelty",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 18,
+		"active": 1,
+		"name": "New Wave",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 19,
+		"active": 1,
+		"name": "Indie Rock",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 20,
+		"active": 1,
+		"name": "Hip-Hop\/Rap",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 21,
+		"active": 1,
+		"name": "Blues",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 22,
+		"active": 1,
+		"name": "Other",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 23,
+		"active": 1,
+		"name": "Reggae\/Ska",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 25,
+		"active": 1,
+		"name": "Jazz",
+		"updated": "2017-09-05 05:20:37"
+	}, {
+		"id": 26,
+		"active": 1,
+		"name": "Classical",
+		"updated": "2019-05-20 15:10:03"
+	}
+]
