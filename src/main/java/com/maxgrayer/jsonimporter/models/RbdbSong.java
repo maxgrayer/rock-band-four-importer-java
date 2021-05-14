@@ -1,6 +1,6 @@
 package com.maxgrayer.jsonimporter.models;
 
-public class Song {
+public class RbdbSong {
     private int id;
     private String article;
     private String name;
