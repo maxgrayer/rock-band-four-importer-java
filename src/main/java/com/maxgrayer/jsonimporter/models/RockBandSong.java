@@ -1,5 +1,7 @@
 package com.maxgrayer.jsonimporter.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RockBandSong {
 
     private String f1;
@@ -45,7 +47,8 @@ public class RockBandSong {
     private int f14;
     private int f15;
 
-    public String getF1() {
+    @JsonProperty("f1")
+    public String title() {
         return f1;
     }
 
@@ -53,7 +56,8 @@ public class RockBandSong {
         this.f1 = f1;
     }
 
-    public String getF2() {
+    @JsonProperty("f2")
+    public String artist() {
         return f2;
     }
 
@@ -61,7 +65,8 @@ public class RockBandSong {
         this.f2 = f2;
     }
 
-    public int getF3() {
+    @JsonProperty("f3")
+    public int year() {
         return f3;
     }
 
@@ -69,7 +74,8 @@ public class RockBandSong {
         this.f3 = f3;
     }
 
-    public String getF4() {
+    @JsonProperty("f4")
+    public String album() {
         return f4;
     }
 
@@ -77,7 +83,8 @@ public class RockBandSong {
         this.f4 = f4;
     }
 
-    public int getF5() {
+    @JsonProperty("f5")
+    public int trackNum() {
         return f5;
     }
 
@@ -85,7 +92,8 @@ public class RockBandSong {
         this.f5 = f5;
     }
 
-    public String getF6() {
+    @JsonProperty("f6")
+    public String genre() {
         return f6;
     }
 
@@ -93,6 +101,7 @@ public class RockBandSong {
         this.f6 = f6;
     }
 
+    @JsonProperty("f7")
     public boolean isF7() {
         return f7;
     }
@@ -101,7 +110,8 @@ public class RockBandSong {
         this.f7 = f7;
     }
 
-    public String getF8() {
+    @JsonProperty("f8")
+    public String gender() {
         return f8;
     }
 
@@ -109,7 +119,8 @@ public class RockBandSong {
         this.f8 = f8;
     }
 
-    public int getF9() {
+    @JsonProperty("f9")
+    public int duration() {
         return f9;
     }
 
@@ -117,7 +128,8 @@ public class RockBandSong {
         this.f9 = f9;
     }
 
-    public String getF45() {
+    @JsonProperty("f45")
+    public String shortname() {
         return f45;
     }
 
@@ -125,7 +137,8 @@ public class RockBandSong {
         this.f45 = f45;
     }
 
-    public String getF44() {
+    @JsonProperty("f44")
+    public String id() {
         return f44;
     }
 
@@ -133,7 +146,8 @@ public class RockBandSong {
         this.f44 = f44;
     }
 
-    public int getF47() {
+    @JsonProperty("f47")
+    public int sortRankBass() {
         return f47;
     }
 
@@ -141,7 +155,8 @@ public class RockBandSong {
         this.f47 = f47;
     }
 
-    public int getF46() {
+    @JsonProperty("f46")
+    public int sortRankGuitar() {
         return f46;
     }
 
@@ -149,7 +164,8 @@ public class RockBandSong {
         this.f46 = f46;
     }
 
-    public int getF49() {
+    @JsonProperty("f49")
+    public int sortRankVocal() {
         return f49;
     }
 
@@ -157,7 +173,8 @@ public class RockBandSong {
         this.f49 = f49;
     }
 
-    public int getF48() {
+    @JsonProperty("f48")
+    public int sortRankDrum() {
         return f48;
     }
 
@@ -165,6 +182,7 @@ public class RockBandSong {
         this.f48 = f48;
     }
 
+    @JsonProperty("f23")
     public boolean isF23() {
         return f23;
     }
@@ -173,7 +191,8 @@ public class RockBandSong {
         this.f23 = f23;
     }
 
-    public String getF22() {
+    @JsonProperty("f22")
+    public String sortAlbum() {
         return f22;
     }
 
@@ -181,7 +200,8 @@ public class RockBandSong {
         this.f22 = f22;
     }
 
-    public String getF21() {
+    @JsonProperty("f21")
+    public String sortArtist() {
         return f21;
     }
 
@@ -189,7 +209,8 @@ public class RockBandSong {
         this.f21 = f21;
     }
 
-    public String getF20() {
+    @JsonProperty("f20")
+    public String sortTitle() {
         return f20;
     }
 
@@ -197,7 +218,8 @@ public class RockBandSong {
         this.f20 = f20;
     }
 
-    public String getF27() {
+    @JsonProperty("f27")
+    public String awsArtworkLink() {
         return f27;
     }
 
@@ -205,7 +227,8 @@ public class RockBandSong {
         this.f27 = f27;
     }
 
-    public String[] getF26() {
+    @JsonProperty("f26")
+    public String[] sources() {
         return f26;
     }
 
@@ -213,7 +236,8 @@ public class RockBandSong {
         this.f26 = f26;
     }
 
-    public String getF25() {
+    @JsonProperty("f25")
+    public String unknownDate() {
         return f25;
     }
 
@@ -221,7 +245,8 @@ public class RockBandSong {
         this.f25 = f25;
     }
 
-    public String getF24() {
+    @JsonProperty("f24")
+    public String releaseDate() {
         return f24;
     }
 
@@ -229,6 +254,7 @@ public class RockBandSong {
         this.f24 = f24;
     }
 
+    @JsonProperty("f29")
     public boolean isF29() {
         return f29;
     }
@@ -237,7 +263,8 @@ public class RockBandSong {
         this.f29 = f29;
     }
 
-    public String getF28() {
+    @JsonProperty("f28")
+    public String xboxStoreLink() {
         return f28;
     }
 
@@ -245,6 +272,7 @@ public class RockBandSong {
         this.f28 = f28;
     }
 
+    @JsonProperty("f52")
     public int getF52() {
         return f52;
     }
@@ -253,7 +281,8 @@ public class RockBandSong {
         this.f52 = f52;
     }
 
-    public int getF51() {
+    @JsonProperty("f51")
+    public int bpm() {
         return f51;
     }
 
@@ -261,7 +290,8 @@ public class RockBandSong {
         this.f51 = f51;
     }
 
-    public int getF50() {
+    @JsonProperty("f50")
+    public int sortRankBand() {
         return f50;
     }
 
@@ -269,6 +299,7 @@ public class RockBandSong {
         this.f50 = f50;
     }
 
+    @JsonProperty("f30")
     public boolean isF30() {
         return f30;
     }
@@ -277,6 +308,7 @@ public class RockBandSong {
         this.f30 = f30;
     }
 
+    @JsonProperty("f31")
     public boolean isF31() {
         return f31;
     }
@@ -285,6 +317,7 @@ public class RockBandSong {
         this.f31 = f31;
     }
 
+    @JsonProperty("f18")
     public int getF18() {
         return f18;
     }
@@ -293,6 +326,7 @@ public class RockBandSong {
         this.f18 = f18;
     }
 
+    @JsonProperty("f19")
     public boolean isF19() {
         return f19;
     }
@@ -301,6 +335,7 @@ public class RockBandSong {
         this.f19 = f19;
     }
 
+    @JsonProperty("f34")
     public boolean isF34() {
         return f34;
     }
@@ -309,6 +344,7 @@ public class RockBandSong {
         this.f34 = f34;
     }
 
+    @JsonProperty("f35")
     public boolean isF35() {
         return f35;
     }
@@ -317,7 +353,8 @@ public class RockBandSong {
         this.f35 = f35;
     }
 
-    public int getF12() {
+    @JsonProperty("f12")
+    public int displayRankDrums() {
         return f12;
     }
 
@@ -325,7 +362,8 @@ public class RockBandSong {
         this.f12 = f12;
     }
 
-    public int getF13() {
+    @JsonProperty("f13")
+    public int displayRankVocal() {
         return f13;
     }
 
@@ -333,7 +371,8 @@ public class RockBandSong {
         this.f13 = f13;
     }
 
-    public int getF10() {
+    @JsonProperty("f10")
+    public int displayRankGuitar() {
         return f10;
     }
 
@@ -341,7 +380,8 @@ public class RockBandSong {
         this.f10 = f10;
     }
 
-    public int getF11() {
+    @JsonProperty("f11")
+    public int displayRankBass() {
         return f11;
     }
 
@@ -349,6 +389,7 @@ public class RockBandSong {
         this.f11 = f11;
     }
 
+    @JsonProperty("f16")
     public int getF16() {
         return f16;
     }
@@ -357,6 +398,7 @@ public class RockBandSong {
         this.f16 = f16;
     }
 
+    @JsonProperty("f17")
     public int getF17() {
         return f17;
     }
@@ -365,7 +407,8 @@ public class RockBandSong {
         this.f17 = f17;
     }
 
-    public int getF14() {
+    @JsonProperty("f14")
+    public int displayRankBand() {
         return f14;
     }
 
@@ -373,6 +416,7 @@ public class RockBandSong {
         this.f14 = f14;
     }
 
+    @JsonProperty("f15")
     public int getF15() {
         return f15;
     }
