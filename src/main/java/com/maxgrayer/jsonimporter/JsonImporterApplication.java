@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -18,6 +17,7 @@ import com.maxgrayer.jsonimporter.models.CsvSong;
 import com.maxgrayer.jsonimporter.models.Genre;
 import com.maxgrayer.jsonimporter.models.PersistedSong;
 import com.maxgrayer.jsonimporter.models.RbdbSong;
+import com.maxgrayer.jsonimporter.models.RockBandResponse;
 import com.maxgrayer.jsonimporter.repositories.SongRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -52,15 +52,22 @@ public class JsonImporterApplication implements CommandLineRunner {
 	Resource songsFile;
 	@Value("classpath:data/wiki-rock-band-dlc.csv")
 	Resource csvSongsFile;
+	@Value("classpath:data/song-list.json")
+	Resource songListFile;
+	@Value("classpath:data/song-scores.json")
+	Resource songScoreFile;
 
 	/* Parsed File holders */
 	private Album[] albums;
 	private Artist[] artists;
 	private Genre[] genres;
 	private RbdbSong[] songs;
+	private RockBandResponse rockBandResponse;
 
 	@Autowired
 	private SongRepository repository;
+
+	private boolean shouldSave = false;
 
 	@Override
 	public void run(String... args) {
@@ -85,6 +92,9 @@ public class JsonImporterApplication implements CommandLineRunner {
 			final List<CsvSong> csvSongs = readAll(csvReader);
 			LOG.info("CSV songs count: " + csvSongs.size());
 
+			rockBandResponse = objectMapper.readValue(songListFile.getFile(), RockBandResponse.class);
+			LOG.info("Rock Band Data songs count: " + rockBandResponse.getData().getCount());
+
 			for (final RbdbSong rbdbSong : songs) {
 				final PersistedSong newSong = getPersistedSongFromRbdbSong(rbdbSong);
 				if (!persistedSongs.contains(newSong)) {
@@ -104,7 +114,7 @@ public class JsonImporterApplication implements CommandLineRunner {
 			LOG.info("persistedSongs count: " + persistedSongs.size());
 			LOG.info("newSongCount: " + newSongCount);
 
-			if (newSongCount > 0) {
+			if (newSongCount > 0 && shouldSave) {
 				repository.saveAll(persistedSongs);
 				LOG.info("SAVED ALL SONGS!");
 			}
