@@ -1,9 +1,9 @@
 package com.maxgrayer.jsonimporter.models;
 
-public class RockBandResponse {
+public class RockBandScoreResponse {
     private int status;
 
-    private RockBandData data;
+    private RockBandScoreSongs data;
 
     public int getStatus() {
         return status;
@@ -13,11 +13,12 @@ public class RockBandResponse {
         this.status = status;
     }
 
-    public RockBandData getData() {
+    public RockBandScoreSongs getData() {
         return data;
     }
 
-    public void setData(RockBandData data) {
+    public void setData(RockBandScoreSongs data) {
         this.data = data;
     }
+
 }

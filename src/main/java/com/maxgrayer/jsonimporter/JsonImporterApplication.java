@@ -17,7 +17,8 @@ import com.maxgrayer.jsonimporter.models.CsvSong;
 import com.maxgrayer.jsonimporter.models.Genre;
 import com.maxgrayer.jsonimporter.models.PersistedSong;
 import com.maxgrayer.jsonimporter.models.RbdbSong;
-import com.maxgrayer.jsonimporter.models.RockBandResponse;
+import com.maxgrayer.jsonimporter.models.RockBandScoreResponse;
+import com.maxgrayer.jsonimporter.models.RockBandSongResponse;
 import com.maxgrayer.jsonimporter.repositories.SongRepository;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
@@ -62,7 +63,8 @@ public class JsonImporterApplication implements CommandLineRunner {
 	private Artist[] artists;
 	private Genre[] genres;
 	private RbdbSong[] songs;
-	private RockBandResponse rockBandResponse;
+	private RockBandSongResponse songResponse;
+	private RockBandScoreResponse scoreResponse;
 
 	@Autowired
 	private SongRepository repository;
@@ -92,8 +94,11 @@ public class JsonImporterApplication implements CommandLineRunner {
 			final List<CsvSong> csvSongs = readAll(csvReader);
 			LOG.info("CSV songs count: " + csvSongs.size());
 
-			rockBandResponse = objectMapper.readValue(songListFile.getFile(), RockBandResponse.class);
-			LOG.info("Rock Band Data songs count: " + rockBandResponse.getData().getCount());
+			songResponse = objectMapper.readValue(songListFile.getFile(), RockBandSongResponse.class);
+			LOG.info("Rock Band Data songs count: " + songResponse.getData().getCount());
+
+			scoreResponse = objectMapper.readValue(songScoreFile.getFile(), RockBandScoreResponse.class);
+			LOG.info("Rock Band Data score count: " + scoreResponse.getData().getScores().size());
 
 			for (final RbdbSong rbdbSong : songs) {
 				final PersistedSong newSong = getPersistedSongFromRbdbSong(rbdbSong);
