@@ -3,7 +3,6 @@ package com.maxgrayer.jsonimporter.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RockBandSong {
-
     private String f1;
     private String f2;
     private int f3;
@@ -423,6 +422,11 @@ public class RockBandSong {
 
     public void setF15(int f15) {
         this.f15 = f15;
+    }
+
+    public boolean isSameSongAs(final PersistedSong otherSong) {
+        return this.artist().equalsIgnoreCase(otherSong.getArtist())
+                && this.title().equalsIgnoreCase(otherSong.getTitle());
     }
 
 }

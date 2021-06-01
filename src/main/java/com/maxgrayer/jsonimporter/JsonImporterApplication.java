@@ -1,28 +1,24 @@
 package com.maxgrayer.jsonimporter;
 
-import java.io.Reader;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maxgrayer.jsonimporter.models.Album;
 import com.maxgrayer.jsonimporter.models.Artist;
-import com.maxgrayer.jsonimporter.models.CsvSong;
 import com.maxgrayer.jsonimporter.models.Genre;
 import com.maxgrayer.jsonimporter.models.PersistedSong;
 import com.maxgrayer.jsonimporter.models.RbdbSong;
 import com.maxgrayer.jsonimporter.models.RockBandScoreResponse;
+import com.maxgrayer.jsonimporter.models.RockBandSong;
 import com.maxgrayer.jsonimporter.models.RockBandSongResponse;
 import com.maxgrayer.jsonimporter.repositories.SongRepository;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +47,6 @@ public class JsonImporterApplication implements CommandLineRunner {
 	Resource genresFile;
 	@Value("classpath:data/songs.json")
 	Resource songsFile;
-	@Value("classpath:data/wiki-rock-band-dlc.csv")
-	Resource csvSongsFile;
 	@Value("classpath:data/song-list.json")
 	Resource songListFile;
 	@Value("classpath:data/song-scores.json")
@@ -90,9 +84,6 @@ public class JsonImporterApplication implements CommandLineRunner {
 			LOG.info("genres count: " + genres.length);
 			songs = objectMapper.readValue(songsFile.getFile(), RbdbSong[].class);
 			LOG.info("songs count: " + songs.length);
-			final Reader csvReader = Files.newBufferedReader(csvSongsFile.getFile().toPath());
-			final List<CsvSong> csvSongs = readAll(csvReader);
-			LOG.info("CSV songs count: " + csvSongs.size());
 
 			songResponse = objectMapper.readValue(songListFile.getFile(), RockBandSongResponse.class);
 			LOG.info("Rock Band Data songs count: " + songResponse.getData().getCount());
@@ -100,17 +91,14 @@ public class JsonImporterApplication implements CommandLineRunner {
 			scoreResponse = objectMapper.readValue(songScoreFile.getFile(), RockBandScoreResponse.class);
 			LOG.info("Rock Band Data score count: " + scoreResponse.getData().getScores().size());
 
+			Supplier<Stream<RockBandSong>> streamSupplier = () -> Arrays.stream(songResponse.getData().getSongs());
+
 			for (final RbdbSong rbdbSong : songs) {
 				final PersistedSong newSong = getPersistedSongFromRbdbSong(rbdbSong);
-				if (!persistedSongs.contains(newSong)) {
-					persistedSongs.add(newSong);
-					newSongCount++;
-				}
-			}
+				final Optional<RockBandSong> song = streamSupplier.get().filter(item -> item.isSameSongAs(newSong))
+						.findFirst();
 
-			for (final CsvSong csvSong : csvSongs) {
-				final PersistedSong newSong = getPersistedSongFromCsvSong(csvSong);
-				if (!persistedSongs.contains(newSong)) {
+				if (song.isEmpty()) {
 					persistedSongs.add(newSong);
 					newSongCount++;
 				}
@@ -138,12 +126,6 @@ public class JsonImporterApplication implements CommandLineRunner {
 		return newSong;
 	}
 
-	private PersistedSong getPersistedSongFromCsvSong(final CsvSong csvSong) {
-		final PersistedSong newSong = new PersistedSong(csvSong.getTitle(), csvSong.getArtist(), csvSong.getGenre(),
-				Integer.parseInt(csvSong.getYear()), -1, -1, -1, -1, -1, false, false);
-		return newSong;
-	}
-
 	private String getArtistFromId(final int id) {
 		return Arrays.stream(artists).filter(item -> item.getId() == id).findFirst().map((item) -> {
 			return item.getArticle().concat(item.getName());
@@ -159,21 +141,4 @@ public class JsonImporterApplication implements CommandLineRunner {
 			return "";
 		});
 	}
-
-	private List<CsvSong> readAll(final Reader reader) throws Exception {
-		final CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(1).build();
-		final List<CsvSong> list = new ArrayList<>();
-		final List<String[]> lines = csvReader.readAll();
-		for (String[] parts : lines) {
-			list.add(getCsvSongFromParts(parts));
-		}
-		reader.close();
-		csvReader.close();
-		return list;
-	}
-
-	private CsvSong getCsvSongFromParts(final String[] parts) {
-		return new CsvSong(parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6], parts[7]);
-	}
-
 }
