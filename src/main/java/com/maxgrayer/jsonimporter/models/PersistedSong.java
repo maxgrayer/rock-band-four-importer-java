@@ -14,30 +14,65 @@ public class PersistedSong {
     private int id;
     private String title;
     private String artist;
-    private String genre;
     private int year;
-    private int length;
-    private int guitar;
-    private int drum;
-    private int vocal;
-    private int bass;
+    private String album;
+    private int trackNum;
+    private String genre;
+    private int duration;
+    private String shortname;
+    private int sortRankBass;
+    private int sortRankGuitar;
+    private int sortRankVocal;
+    private int sortRankDrum;
+    private String sortAlbum;
+    private String sortArtist;
+    private String sortTitle;
+    private String awsArtworkLink;
+    private String releaseDate;
+    private String xboxStoreLink;
+    private int bpm;
+    private int sortRankBand;
+    private int displayRankDrums;
+    private int displayRankVocal;
+    private int displayRankGuitar;
+    private int displayRankBass;
+    private int displayRankBand;
     private boolean isOwned;
     private boolean onWishlist;
 
     protected PersistedSong() {
     }
 
-    public PersistedSong(String title, String artist, String genre, int year, int length, int guitar, int drum,
-            int vocal, int bass, boolean isOwned, boolean onWishlist) {
+    public PersistedSong(String title, String artist, int year, String album, int trackNum, String genre, int duration,
+            String shortname, int sortRankBass, int sortRankGuitar, int sortRankVocal, int sortRankDrum,
+            String sortAlbum, String sortArtist, String sortTitle, String awsArtworkLink, String releaseDate,
+            String xboxStoreLink, int bpm, int sortRankBand, int displayRankDrums, int displayRankVocal,
+            int displayRankGuitar, int displayRankBass, int displayRankBand, boolean isOwned, boolean onWishlist) {
         this.title = title;
         this.artist = artist;
-        this.genre = genre;
         this.year = year;
-        this.length = length;
-        this.guitar = guitar;
-        this.drum = drum;
-        this.vocal = vocal;
-        this.bass = bass;
+        this.album = album;
+        this.trackNum = trackNum;
+        this.genre = genre;
+        this.duration = duration;
+        this.shortname = shortname;
+        this.sortRankBass = sortRankBass;
+        this.sortRankGuitar = sortRankGuitar;
+        this.sortRankVocal = sortRankVocal;
+        this.sortRankDrum = sortRankDrum;
+        this.sortAlbum = sortAlbum;
+        this.sortArtist = sortArtist;
+        this.sortTitle = sortTitle;
+        this.awsArtworkLink = awsArtworkLink;
+        this.releaseDate = releaseDate;
+        this.xboxStoreLink = xboxStoreLink;
+        this.bpm = bpm;
+        this.sortRankBand = sortRankBand;
+        this.displayRankDrums = displayRankDrums;
+        this.displayRankVocal = displayRankVocal;
+        this.displayRankGuitar = displayRankGuitar;
+        this.displayRankBass = displayRankBass;
+        this.displayRankBand = displayRankBand;
         this.isOwned = isOwned;
         this.onWishlist = onWishlist;
     }
@@ -66,14 +101,6 @@ public class PersistedSong {
         this.artist = artist;
     }
 
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
     public int getYear() {
         return year;
     }
@@ -82,44 +109,180 @@ public class PersistedSong {
         this.year = year;
     }
 
-    public int getLength() {
-        return length;
+    public String getAlbum() {
+        return album;
     }
 
-    public void setLength(int length) {
-        this.length = length;
+    public void setAlbum(String album) {
+        this.album = album;
     }
 
-    public int getGuitar() {
-        return guitar;
+    public int getTrackNum() {
+        return trackNum;
     }
 
-    public void setGuitar(int guitar) {
-        this.guitar = guitar;
+    public void setTrackNum(int trackNum) {
+        this.trackNum = trackNum;
     }
 
-    public int getDrum() {
-        return drum;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setDrum(int drum) {
-        this.drum = drum;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
-    public int getVocal() {
-        return vocal;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setVocal(int vocal) {
-        this.vocal = vocal;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
-    public int getBass() {
-        return bass;
+    public String getShortname() {
+        return shortname;
     }
 
-    public void setBass(int bass) {
-        this.bass = bass;
+    public void setShortname(String shortname) {
+        this.shortname = shortname;
+    }
+
+    public int getSortRankBass() {
+        return sortRankBass;
+    }
+
+    public void setSortRankBass(int sortRankBass) {
+        this.sortRankBass = sortRankBass;
+    }
+
+    public int getSortRankGuitar() {
+        return sortRankGuitar;
+    }
+
+    public void setSortRankGuitar(int sortRankGuitar) {
+        this.sortRankGuitar = sortRankGuitar;
+    }
+
+    public int getSortRankVocal() {
+        return sortRankVocal;
+    }
+
+    public void setSortRankVocal(int sortRankVocal) {
+        this.sortRankVocal = sortRankVocal;
+    }
+
+    public int getSortRankDrum() {
+        return sortRankDrum;
+    }
+
+    public void setSortRankDrum(int sortRankDrum) {
+        this.sortRankDrum = sortRankDrum;
+    }
+
+    public String getSortAlbum() {
+        return sortAlbum;
+    }
+
+    public void setSortAlbum(String sortAlbum) {
+        this.sortAlbum = sortAlbum;
+    }
+
+    public String getSortArtist() {
+        return sortArtist;
+    }
+
+    public void setSortArtist(String sortArtist) {
+        this.sortArtist = sortArtist;
+    }
+
+    public String getSortTitle() {
+        return sortTitle;
+    }
+
+    public void setSortTitle(String sortTitle) {
+        this.sortTitle = sortTitle;
+    }
+
+    public String getAwsArtworkLink() {
+        return awsArtworkLink;
+    }
+
+    public void setAwsArtworkLink(String awsArtworkLink) {
+        this.awsArtworkLink = awsArtworkLink;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getXboxStoreLink() {
+        return xboxStoreLink;
+    }
+
+    public void setXboxStoreLink(String xboxStoreLink) {
+        this.xboxStoreLink = xboxStoreLink;
+    }
+
+    public int getBpm() {
+        return bpm;
+    }
+
+    public void setBpm(int bpm) {
+        this.bpm = bpm;
+    }
+
+    public int getSortRankBand() {
+        return sortRankBand;
+    }
+
+    public void setSortRankBand(int sortRankBand) {
+        this.sortRankBand = sortRankBand;
+    }
+
+    public int getDisplayRankDrums() {
+        return displayRankDrums;
+    }
+
+    public void setDisplayRankDrums(int displayRankDrums) {
+        this.displayRankDrums = displayRankDrums;
+    }
+
+    public int getDisplayRankVocal() {
+        return displayRankVocal;
+    }
+
+    public void setDisplayRankVocal(int displayRankVocal) {
+        this.displayRankVocal = displayRankVocal;
+    }
+
+    public int getDisplayRankGuitar() {
+        return displayRankGuitar;
+    }
+
+    public void setDisplayRankGuitar(int displayRankGuitar) {
+        this.displayRankGuitar = displayRankGuitar;
+    }
+
+    public int getDisplayRankBass() {
+        return displayRankBass;
+    }
+
+    public void setDisplayRankBass(int displayRankBass) {
+        this.displayRankBass = displayRankBass;
+    }
+
+    public int getDisplayRankBand() {
+        return displayRankBand;
+    }
+
+    public void setDisplayRankBand(int displayRankBand) {
+        this.displayRankBand = displayRankBand;
     }
 
     public boolean isOwned() {
@@ -142,9 +305,11 @@ public class PersistedSong {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((artist == null) ? 0 : artist.toLowerCase().hashCode());
-        result = prime * result + ((title == null) ? 0 : title.toLowerCase().hashCode());
-        result = prime * result + year;
+        result = prime * result + ((album == null) ? 0 : album.hashCode());
+        result = prime * result + ((artist == null) ? 0 : artist.hashCode());
+        result = prime * result + ((genre == null) ? 0 : genre.hashCode());
+        result = prime * result + ((shortname == null) ? 0 : shortname.hashCode());
+        result = prime * result + ((title == null) ? 0 : title.hashCode());
         return result;
     }
 
@@ -157,17 +322,30 @@ public class PersistedSong {
         if (getClass() != obj.getClass())
             return false;
         PersistedSong other = (PersistedSong) obj;
+        if (album == null) {
+            if (other.album != null)
+                return false;
+        } else if (!album.equals(other.album))
+            return false;
         if (artist == null) {
             if (other.artist != null)
                 return false;
-        } else if (!artist.equalsIgnoreCase(other.artist))
+        } else if (!artist.equals(other.artist))
+            return false;
+        if (genre == null) {
+            if (other.genre != null)
+                return false;
+        } else if (!genre.equals(other.genre))
+            return false;
+        if (shortname == null) {
+            if (other.shortname != null)
+                return false;
+        } else if (!shortname.equals(other.shortname))
             return false;
         if (title == null) {
             if (other.title != null)
                 return false;
-        } else if (!title.equalsIgnoreCase(other.title))
-            return false;
-        if (year != other.year)
+        } else if (!title.equals(other.title))
             return false;
         return true;
     }
