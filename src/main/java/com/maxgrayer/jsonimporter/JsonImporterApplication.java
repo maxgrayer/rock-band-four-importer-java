@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +13,7 @@ import com.maxgrayer.jsonimporter.models.Artist;
 import com.maxgrayer.jsonimporter.models.Genre;
 import com.maxgrayer.jsonimporter.models.PersistedSong;
 import com.maxgrayer.jsonimporter.models.RbdbSong;
+import com.maxgrayer.jsonimporter.models.RockBandScoreData;
 import com.maxgrayer.jsonimporter.models.RockBandScoreResponse;
 import com.maxgrayer.jsonimporter.models.RockBandSong;
 import com.maxgrayer.jsonimporter.models.RockBandSongResponse;
@@ -68,7 +67,6 @@ public class JsonImporterApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 		LOG.info("EXECUTING : command line runner");
-		int newSongCount = 0;
 
 		try {
 			final Set<PersistedSong> persistedSongs = new HashSet<PersistedSong>();
@@ -91,29 +89,46 @@ public class JsonImporterApplication implements CommandLineRunner {
 			scoreResponse = objectMapper.readValue(songScoreFile.getFile(), RockBandScoreResponse.class);
 			LOG.info("Rock Band Data score count: " + scoreResponse.getData().getScores().size());
 
-			Supplier<Stream<RockBandSong>> streamSupplier = () -> Arrays.stream(songResponse.getData().getSongs());
-
 			for (final RbdbSong rbdbSong : songs) {
 				final PersistedSong newSong = getPersistedSongFromRbdbSong(rbdbSong);
-				final Optional<RockBandSong> song = streamSupplier.get().filter(item -> item.isSameSongAs(newSong))
-						.findFirst();
+				final Optional<RockBandSong> song = Arrays.stream(songResponse.getData().getSongs())
+						.filter(item -> item.isSameSongAs(newSong)).findFirst();
 
-				if (song.isEmpty()) {
+				if (song.isEmpty() && !persistedSongs.contains(newSong)) {
 					persistedSongs.add(newSong);
-					newSongCount++;
+				}
+			}
+
+			for (final RockBandSong rockBandSong : songResponse.getData().getSongs()) {
+				final Optional<String> optionalKey = scoreResponse.getData().getScores().keySet().stream()
+						.filter(item -> item.equalsIgnoreCase(rockBandSong.shortname())).findFirst();
+
+				if (!optionalKey.isEmpty()) {
+					final String shortnameKey = optionalKey.get();
+					final RockBandScoreData scoreData = scoreResponse.getData().getScores().get(shortnameKey);
+					final PersistedSong newSong = getPersistedSongFromRockBandSongData(rockBandSong, scoreData);
+
+					if (!persistedSongs.contains(newSong)) {
+						persistedSongs.add(newSong);
+					}
 				}
 			}
 
 			LOG.info("persistedSongs count: " + persistedSongs.size());
-			LOG.info("newSongCount: " + newSongCount);
 
-			if (newSongCount > 0 && shouldSave) {
+			if (shouldSave) {
 				repository.saveAll(persistedSongs);
 				LOG.info("SAVED ALL SONGS!");
 			}
 		} catch (final Exception ex) {
 			LOG.error("Error during file reads", ex);
 		}
+	}
+
+	private PersistedSong getPersistedSongFromRockBandSongData(final RockBandSong song, final RockBandScoreData score) {
+		return new PersistedSong(song.title(), song.artist(), song.genre(), song.year(), (int) song.duration(),
+				song.displayRankGuitar(), song.displayRankDrums(), song.displayRankVocal(), song.displayRankBass(),
+				score.isOwned(), score.isWishList());
 	}
 
 	private PersistedSong getPersistedSongFromRbdbSong(final RbdbSong song) {
