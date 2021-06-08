@@ -1,6 +1,5 @@
 package com.maxgrayer.jsonimporter;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
@@ -8,12 +7,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.maxgrayer.jsonimporter.models.Album;
-import com.maxgrayer.jsonimporter.models.Artist;
-import com.maxgrayer.jsonimporter.models.Genre;
-import com.maxgrayer.jsonimporter.models.Instruments;
 import com.maxgrayer.jsonimporter.models.PersistedSong;
-import com.maxgrayer.jsonimporter.models.RbdbSong;
 import com.maxgrayer.jsonimporter.models.RockBandScoreData;
 import com.maxgrayer.jsonimporter.models.RockBandScoreResponse;
 import com.maxgrayer.jsonimporter.models.RockBandSong;
@@ -39,24 +33,12 @@ public class JsonImporterApplication implements CommandLineRunner {
 		LOG.info("APPLICATION FINISHED");
 	}
 
-	@Value("classpath:data/albums.json")
-	Resource albumsFile;
-	@Value("classpath:data/artists.json")
-	Resource artistsFile;
-	@Value("classpath:data/genres.json")
-	Resource genresFile;
-	@Value("classpath:data/songs.json")
-	Resource songsFile;
 	@Value("classpath:data/song-list.json")
 	Resource songListFile;
 	@Value("classpath:data/song-scores.json")
 	Resource songScoreFile;
 
 	/* Parsed File holders */
-	private Album[] albums;
-	private Artist[] artists;
-	private Genre[] genres;
-	private RbdbSong[] songs;
 	private RockBandSongResponse songResponse;
 	private RockBandScoreResponse scoreResponse;
 
@@ -68,6 +50,7 @@ public class JsonImporterApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) {
 		LOG.info("EXECUTING : command line runner");
+		int newSongCount = 0;
 
 		try {
 			final Set<PersistedSong> persistedSongs = new HashSet<PersistedSong>();
@@ -87,38 +70,21 @@ public class JsonImporterApplication implements CommandLineRunner {
 				final Optional<String> optionalKey = scoreResponse.getData().getScores().keySet().stream()
 						.filter(item -> item.equalsIgnoreCase(rockBandSong.shortname())).findFirst();
 
+				RockBandScoreData scoreData = null;
 				if (!optionalKey.isEmpty()) {
 					final String shortnameKey = optionalKey.get();
-					final RockBandScoreData scoreData = scoreResponse.getData().getScores().get(shortnameKey);
-					final PersistedSong newSong = getPersistedSongFromRockBandSongData(rockBandSong, scoreData);
-
-					if (!persistedSongs.contains(newSong)) {
-						persistedSongs.add(newSong);
-					}
+					scoreData = scoreResponse.getData().getScores().get(shortnameKey);
 				}
-			}
+				final PersistedSong newSong = getPersistedSongFromRockBandSongData(rockBandSong, scoreData);
 
-			// Process secondary data
-			albums = objectMapper.readValue(albumsFile.getFile(), Album[].class);
-			LOG.info("albums count: " + albums.length);
-			artists = objectMapper.readValue(artistsFile.getFile(), Artist[].class);
-			LOG.info("artists count: " + artists.length);
-			genres = objectMapper.readValue(genresFile.getFile(), Genre[].class);
-			LOG.info("genres count: " + genres.length);
-			songs = objectMapper.readValue(songsFile.getFile(), RbdbSong[].class);
-			LOG.info("songs count: " + songs.length);
-
-			for (final RbdbSong rbdbSong : songs) {
-				final PersistedSong newSong = getPersistedSongFromRbdbSong(rbdbSong);
-				final Optional<RockBandSong> song = Arrays.stream(songResponse.getData().getSongs())
-						.filter(item -> item.isSameSongAs(newSong)).findFirst();
-
-				if (song.isEmpty() && !persistedSongs.contains(newSong)) {
+				if (!persistedSongs.contains(newSong)) {
 					persistedSongs.add(newSong);
+					newSongCount++;
 				}
 			}
 
 			LOG.info("persistedSongs count: " + persistedSongs.size());
+			LOG.info("newSongCount: " + newSongCount);
 
 			if (shouldSave) {
 				repository.saveAll(persistedSongs);
@@ -130,55 +96,18 @@ public class JsonImporterApplication implements CommandLineRunner {
 	}
 
 	private PersistedSong getPersistedSongFromRockBandSongData(final RockBandSong song, final RockBandScoreData score) {
+		boolean isOwned = false;
+		boolean onWishlist = false;
+		if (score != null) {
+			isOwned = score.isOwned();
+			onWishlist = score.isWishList();
+		}
+
 		return new PersistedSong(song.title(), song.artist(), song.year(), song.album(), song.trackNum(), song.genre(),
 				song.duration(), song.shortname(), song.sortRankBass(), song.sortRankGuitar(), song.sortRankVocal(),
 				song.sortRankDrum(), song.sortAlbum(), song.sortArtist(), song.sortTitle(), song.awsArtworkLink(),
 				song.releaseDate(), song.xboxStoreLink(), song.bpm(), song.sortRankBand(), song.displayRankDrums(),
 				song.displayRankVocal(), song.displayRankGuitar(), song.displayRankBass(), song.displayRankBand(),
-				score.isOwned(), score.isWishList());
-	}
-
-	private PersistedSong getPersistedSongFromRbdbSong(final RbdbSong song) {
-		final String title = song.getArticle().concat(song.getName());
-		final String sortTitle = song.getName();
-		final Artist artistObj = getArtistFromId(song.getArtist());
-		String artist = "";
-		String sortArtist = "";
-		if (artistObj != null) {
-			artist = artistObj.getArticle().concat(artistObj.getName());
-			sortArtist = artistObj.getName();
-		}
-		final String genre = getGenreFromId(song.getGenre());
-		final Album albumObj = song.getAlbum();
-		String album = albumObj.getName();
-		String sortAlbum = albumObj.getName();
-		final int trackNum = albumObj.getTrack();
-		if (albumObj.getArticle() != null) {
-			album = albumObj.getArticle().concat(albumObj.getName());
-			sortAlbum = albumObj.getName();
-		}
-		final Instruments ranks = song.getTiers();
-		final PersistedSong newSong = new PersistedSong(title, artist, song.getYear(), album, trackNum, genre,
-				(int) song.getDuration(), song.getShortname(), ranks.getBass(), ranks.getGuitar(), ranks.getVocals(),
-				ranks.getDrums(), sortAlbum, sortArtist, sortTitle, "", song.getReleased(), "", song.getBpm(),
-				ranks.getBand(), ranks.getDrums(), ranks.getVocals(), ranks.getGuitar(), ranks.getBass(),
-				ranks.getBand(), false, false);
-		return newSong;
-	}
-
-	private Artist getArtistFromId(final int id) {
-		return Arrays.stream(artists).filter(item -> item.getId() == id).findFirst().map((item) -> {
-			return item;
-		}).orElseGet(() -> {
-			return null;
-		});
-	}
-
-	private String getGenreFromId(final int id) {
-		return Arrays.stream(genres).filter(item -> item.id() == id).findFirst().map((item) -> {
-			return item.name();
-		}).orElseGet(() -> {
-			return "";
-		});
+				isOwned, onWishlist);
 	}
 }
