@@ -305,11 +305,15 @@ public class PersistedSong {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((album == null) ? 0 : album.hashCode());
-        result = prime * result + ((artist == null) ? 0 : artist.hashCode());
+        result = prime * result + bpm;
+        result = prime * result + displayRankBand;
+        result = prime * result + displayRankBass;
+        result = prime * result + displayRankDrums;
+        result = prime * result + displayRankGuitar;
+        result = prime * result + displayRankVocal;
+        result = prime * result + duration;
         result = prime * result + ((genre == null) ? 0 : genre.hashCode());
         result = prime * result + ((shortname == null) ? 0 : shortname.hashCode());
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
         return result;
     }
 
@@ -322,15 +326,19 @@ public class PersistedSong {
         if (getClass() != obj.getClass())
             return false;
         PersistedSong other = (PersistedSong) obj;
-        if (album == null) {
-            if (other.album != null)
-                return false;
-        } else if (!album.equals(other.album))
+        if (bpm != other.bpm)
             return false;
-        if (artist == null) {
-            if (other.artist != null)
-                return false;
-        } else if (!artist.equals(other.artist))
+        if (displayRankBand != other.displayRankBand)
+            return false;
+        if (displayRankBass != other.displayRankBass)
+            return false;
+        if (displayRankDrums != other.displayRankDrums)
+            return false;
+        if (displayRankGuitar != other.displayRankGuitar)
+            return false;
+        if (displayRankVocal != other.displayRankVocal)
+            return false;
+        if (duration != other.duration)
             return false;
         if (genre == null) {
             if (other.genre != null)
@@ -341,11 +349,6 @@ public class PersistedSong {
             if (other.shortname != null)
                 return false;
         } else if (!shortname.equals(other.shortname))
-            return false;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
             return false;
         return true;
     }
