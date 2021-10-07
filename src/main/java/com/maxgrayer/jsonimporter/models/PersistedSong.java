@@ -301,6 +301,57 @@ public class PersistedSong {
         this.onWishlist = onWishlist;
     }
 
+    private String getDecade() {
+        if (isBetween(year, 2020, 2029)) {
+            return "2020s";
+        } else if (isBetween(year, 2010, 2019)) {
+            return "2010s";
+        } else if (isBetween(year, 2000, 2009)) {
+            return "2000s";
+        } else if (isBetween(year, 1990, 1999)) {
+            return "1990s";
+        } else if (isBetween(year, 1980, 1989)) {
+            return "1980s";
+        } else if (isBetween(year, 1970, 1979)) {
+            return "1970s";
+        } else if (isBetween(year, 1960, 1969)) {
+            return "1960s";
+        } else if (isBetween(year, 1950, 1959)) {
+            return "1950s";
+        }
+
+        return "Unknown";
+    }
+
+    public static boolean isBetween(final int x, final int lower, final int upper) {
+        return lower <= x && x <= upper;
+    }
+
+    private String getStatus() {
+        if (this.isOwned) {
+            return "In Library";
+        } else if (this.onWishlist) {
+            return "On Wishlist";
+        }
+        return "Available For Purchase";
+    }
+
+    public String asCsvString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(artist + ",");
+        stringBuilder.append(title + ",");
+        stringBuilder.append(album + ",");
+        stringBuilder.append(genre + ",");
+        stringBuilder.append(year + ",");
+        stringBuilder.append(getDecade() + ",");
+        stringBuilder.append(displayRankVocal + ",");
+        stringBuilder.append(displayRankGuitar + ",");
+        stringBuilder.append(displayRankBass + ",");
+        stringBuilder.append(displayRankDrums + ",");
+        stringBuilder.append(getStatus());
+        return stringBuilder.toString();
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

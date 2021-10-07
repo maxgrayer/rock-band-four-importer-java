@@ -1,9 +1,12 @@
 package com.maxgrayer.jsonimporter;
 
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,9 +50,58 @@ public class JsonImporterApplication implements CommandLineRunner {
 
 	private boolean shouldSave = false;
 
+	private boolean onlyParseToCsv = true;
+
 	@Override
 	public void run(String... args) {
 		LOG.info("EXECUTING : command line runner");
+
+		if (onlyParseToCsv) {
+			parseToCsv();
+		} else {
+			parseAndPersist();
+		}
+	}
+
+	private void parseToCsv() {
+		final Set<PersistedSong> catalog = new HashSet<PersistedSong>();
+		try {
+			final ObjectMapper objectMapper = new ObjectMapper()
+					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+			// Process "official" RB data
+			songResponse = objectMapper.readValue(songListFile.getFile(), RockBandSongResponse.class);
+			LOG.info("Rock Band Data songs count: " + songResponse.getData().getCount());
+
+			scoreResponse = objectMapper.readValue(songScoreFile.getFile(), RockBandScoreResponse.class);
+			LOG.info("Rock Band Data score count: " + scoreResponse.getData().getScores().size());
+
+			for (final RockBandSong rockBandSong : songResponse.getData().getSongs()) {
+				final Optional<String> optionalKey = scoreResponse.getData().getScores().keySet().stream()
+						.filter(item -> item.equalsIgnoreCase(rockBandSong.shortname())).findFirst();
+
+				RockBandScoreData scoreData = null;
+				if (!optionalKey.isEmpty()) {
+					final String shortnameKey = optionalKey.get();
+					scoreData = scoreResponse.getData().getScores().get(shortnameKey);
+				}
+				final PersistedSong newSong = getPersistedSongFromRockBandSongData(rockBandSong, scoreData);
+				catalog.add(newSong);
+			}
+
+			String csvString = catalog.stream().map(song -> song.asCsvString()).collect(Collectors.joining("\n"));
+
+			// Write the file
+			FileWriter fileWriter = new FileWriter("catalog.csv");
+			PrintWriter printWriter = new PrintWriter(fileWriter);
+			printWriter.print(csvString);
+			printWriter.close();
+			LOG.info("Rock Band Data written to CSV file.");
+		} catch (final Exception ex) {
+			LOG.error("Error during file reads", ex);
+		}
+	}
+
+	private void parseAndPersist() {
 		int newSongCount = 0;
 
 		try {
