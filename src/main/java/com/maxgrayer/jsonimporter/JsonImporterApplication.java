@@ -50,20 +50,20 @@ public class JsonImporterApplication implements CommandLineRunner {
 
 	private boolean shouldSave = false;
 
-	private boolean onlyParseToCsv = true;
+	private boolean onlyParseToTsv = true;
 
 	@Override
 	public void run(String... args) {
 		LOG.info("EXECUTING : command line runner");
 
-		if (onlyParseToCsv) {
-			parseToCsv();
+		if (onlyParseToTsv) {
+			parseToTsv();
 		} else {
 			parseAndPersist();
 		}
 	}
 
-	private void parseToCsv() {
+	private void parseToTsv() {
 		final Set<PersistedSong> catalog = new HashSet<PersistedSong>();
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper()
@@ -91,11 +91,11 @@ public class JsonImporterApplication implements CommandLineRunner {
 			String csvString = catalog.stream().map(song -> song.asCsvString()).collect(Collectors.joining("\n"));
 
 			// Write the file
-			FileWriter fileWriter = new FileWriter("catalog.csv");
+			FileWriter fileWriter = new FileWriter("catalog.tsv");
 			PrintWriter printWriter = new PrintWriter(fileWriter);
 			printWriter.print(csvString);
 			printWriter.close();
-			LOG.info("Rock Band Data written to CSV file.");
+			LOG.info("Rock Band Data written to TSV file.");
 		} catch (final Exception ex) {
 			LOG.error("Error during file reads", ex);
 		}

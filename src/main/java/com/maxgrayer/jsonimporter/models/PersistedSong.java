@@ -338,16 +338,16 @@ public class PersistedSong {
 
     public String asCsvString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(artist + ",");
-        stringBuilder.append(title + ",");
-        stringBuilder.append(album + ",");
-        stringBuilder.append(genre + ",");
-        stringBuilder.append(year + ",");
-        stringBuilder.append(getDecade() + ",");
-        stringBuilder.append(displayRankVocal + ",");
-        stringBuilder.append(displayRankGuitar + ",");
-        stringBuilder.append(displayRankBass + ",");
-        stringBuilder.append(displayRankDrums + ",");
+        stringBuilder.append(artist + "\t");
+        stringBuilder.append(title + "\t");
+        stringBuilder.append(album + "\t");
+        stringBuilder.append(genre + "\t");
+        stringBuilder.append(year + "\t");
+        stringBuilder.append(getDecade() + "\t");
+        stringBuilder.append(displayRankVocal + "\t");
+        stringBuilder.append(displayRankGuitar + "\t");
+        stringBuilder.append(displayRankBass + "\t");
+        stringBuilder.append(displayRankDrums + "\t");
         stringBuilder.append(getStatus());
         return stringBuilder.toString();
     }
