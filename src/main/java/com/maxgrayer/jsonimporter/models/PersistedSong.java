@@ -344,6 +344,7 @@ public class PersistedSong {
         stringBuilder.append(genre + "\t");
         stringBuilder.append(year + "\t");
         stringBuilder.append(getDecade() + "\t");
+        stringBuilder.append(releaseDate + "\t");
         stringBuilder.append(displayRankVocal + "\t");
         stringBuilder.append(displayRankGuitar + "\t");
         stringBuilder.append(displayRankBass + "\t");
