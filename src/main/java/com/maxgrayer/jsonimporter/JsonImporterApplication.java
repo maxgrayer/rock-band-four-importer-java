@@ -2,8 +2,12 @@ package com.maxgrayer.jsonimporter;
 
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -64,7 +68,7 @@ public class JsonImporterApplication implements CommandLineRunner {
 	}
 
 	private void parseToTsv() {
-		final Set<PersistedSong> catalog = new HashSet<PersistedSong>();
+		final List<PersistedSong> catalog = new ArrayList<PersistedSong>();
 		try {
 			final ObjectMapper objectMapper = new ObjectMapper()
 					.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -85,8 +89,16 @@ public class JsonImporterApplication implements CommandLineRunner {
 					scoreData = scoreResponse.getData().getScores().get(shortnameKey);
 				}
 				final PersistedSong newSong = getPersistedSongFromRockBandSongData(rockBandSong, scoreData);
-				catalog.add(newSong);
+
+				// checking for release date before adding to avoid NPE when sorting later
+				// only a couple songs with this bad data [as of 02-25-2022]
+				if (newSong.getReleaseDate() != null) {
+					catalog.add(newSong);
+				}
 			}
+
+			// Sort by release date, inverted (newer items first)
+			Collections.sort(catalog, Comparator.comparing(PersistedSong::getReleaseDate).reversed());
 
 			String tsvString = catalog.stream().map(song -> song.asTsvString()).collect(Collectors.joining("\n"));
 
