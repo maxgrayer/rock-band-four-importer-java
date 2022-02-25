@@ -236,7 +236,7 @@ public class RockBandSong {
     }
 
     @JsonProperty("f25")
-    public String unknownDate() {
+    public String rockBand4AvailabilityDate() {
         return f25;
     }
 
