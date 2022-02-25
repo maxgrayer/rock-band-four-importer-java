@@ -336,7 +336,7 @@ public class PersistedSong {
         return "Available For Purchase";
     }
 
-    public String asCsvString() {
+    public String asTsvString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(artist + "\t");
         stringBuilder.append(title + "\t");

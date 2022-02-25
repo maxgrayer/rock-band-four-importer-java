@@ -88,12 +88,12 @@ public class JsonImporterApplication implements CommandLineRunner {
 				catalog.add(newSong);
 			}
 
-			String csvString = catalog.stream().map(song -> song.asCsvString()).collect(Collectors.joining("\n"));
+			String tsvString = catalog.stream().map(song -> song.asTsvString()).collect(Collectors.joining("\n"));
 
 			// Write the file
 			FileWriter fileWriter = new FileWriter("catalog.tsv");
 			PrintWriter printWriter = new PrintWriter(fileWriter);
-			printWriter.print(csvString);
+			printWriter.print(tsvString);
 			printWriter.close();
 			LOG.info("Rock Band Data written to TSV file.");
 		} catch (final Exception ex) {
